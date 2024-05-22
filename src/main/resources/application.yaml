@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: tui-mobile-interview
+  webflux:
+    base-path: /api
+  mvc:
+    problemdetails:
+      enabled: true
+
+logging:
+  level:
+    io:
+      reflectoring: INFO
+    org:
+      springframework:
+        web: INFO
+    reactor:
+      netty:
+        http:
+          client: INFO
