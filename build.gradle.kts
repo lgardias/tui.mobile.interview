@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("org.springframework.boot") version "3.2.5"
 }
 
 group = "com.tui.mobile"
@@ -7,6 +8,13 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+}
+
+tasks.named<Jar>("jar") {
+    manifest {
+        attributes["Main-Class"] = "com.tui.mobile.interview.Application"
+        exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+    }
 }
 
 dependencies {
