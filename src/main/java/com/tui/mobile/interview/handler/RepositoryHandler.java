@@ -17,10 +17,11 @@ public class RepositoryHandler {
     private GithubApiService githubApiService;
 
     @SneakyThrows
-    public Mono<ServerResponse> repositoriesByUserName(ServerRequest request){
+    public Mono<ServerResponse> repositoriesByUserName(ServerRequest request) {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(githubApiService.getRepositories(request.pathVariable("userName")), RepositoryResponse.class);
     }
+
 }

@@ -15,7 +15,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class RouterConfig {
 
     @Bean
-    RouterFunction<ServerResponse> routes(RepositoryHandler handler){
+    RouterFunction<ServerResponse> routes(RepositoryHandler handler) {
         return route(GET("/handler/repositories/{userName}").and(accept(MediaType.APPLICATION_JSON)), handler::repositoriesByUserName);
     }
 }

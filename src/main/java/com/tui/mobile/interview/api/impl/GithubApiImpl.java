@@ -1,6 +1,7 @@
 package com.tui.mobile.interview.api.impl;
 
 import com.tui.mobile.interview.api.GithubApi;
+import com.tui.mobile.interview.exception.RepositoriesNotFoundException;
 import com.tui.mobile.interview.model.Branch;
 import com.tui.mobile.interview.model.RepositoryDetails;
 import org.json.JSONArray;
@@ -38,26 +39,7 @@ public class GithubApiImpl implements GithubApi {
             }
             return resultList;
         } catch (IOException | JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void processRepositoryDetails(
-            JSONObject fetchedDetails,
-            List<RepositoryDetails> resultList
-    ) throws JSONException {
-        boolean isFork = Boolean.getBoolean(fetchedDetails
-                .get(JSON_REPOSITORY_FORK_PATH).toString());
-        if (!isFork) {
-            String[] fullRepositoryName = fetchedDetails
-                    .get(JSON_REPOSITORY_FULL_NAME_PATH)
-                    .toString()
-                    .split("/");
-            RepositoryDetails details = new RepositoryDetails(fullRepositoryName[1], fullRepositoryName[0]);
-            log("Repository details" + fetchedDetails + " added to result");
-            resultList.add(details);
-        } else {
-            log("Repository details" + fetchedDetails + " skipped due to being fork");
+            throw new RepositoriesNotFoundException("Zero repositories fetched");
         }
     }
 
@@ -80,7 +62,8 @@ public class GithubApiImpl implements GithubApi {
             }
             return resultList;
         } catch (IOException | JSONException e) {
-            throw new RuntimeException(e);
+            log("Zero branches fetched for repository:" + repositoryName);
+            return Collections.emptyList();
         }
     }
 
@@ -91,6 +74,25 @@ public class GithubApiImpl implements GithubApi {
 
     private String branchDetailsUrl(String ownerMName, String repositoryName) {
         return "https://api.github.com/repos/" + ownerMName + "/" + repositoryName + "/branches";
+    }
+
+    private void processRepositoryDetails(
+            JSONObject fetchedDetails,
+            List<RepositoryDetails> resultList
+    ) throws JSONException {
+        boolean isFork = Boolean.getBoolean(fetchedDetails
+                .get(JSON_REPOSITORY_FORK_PATH).toString());
+        if (!isFork) {
+            String[] fullRepositoryName = fetchedDetails
+                    .get(JSON_REPOSITORY_FULL_NAME_PATH)
+                    .toString()
+                    .split("/");
+            RepositoryDetails details = new RepositoryDetails(fullRepositoryName[1], fullRepositoryName[0]);
+            log("Repository details" + fetchedDetails + " added to result");
+            resultList.add(details);
+        } else {
+            log("Repository details" + fetchedDetails + " skipped due to being fork");
+        }
     }
 
     private JSONArray readJsonFromUrl(String url) throws IOException, JSONException {

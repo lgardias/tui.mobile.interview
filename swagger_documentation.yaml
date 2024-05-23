@@ -1,0 +1,92 @@
+openapi: 3.0.3
+
+info:
+  title: Github Repository API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /repositories{username}:
+    get:
+      operationId: getRepositoryList
+      parameters:
+        - name: username
+          in: path
+          description: Github username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RepositoryResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+components:
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotAcceptable:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    RepositoryResponse:
+      type: object
+      required:
+        - repositoryName
+        - ownerLogin
+        - branchDetails
+      properties:
+        repositoryName:
+          type: string
+          description: 'Github repository name'
+        ownerLogin:
+          type: string
+          description: 'Github owner login'
+        branches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Branch'
+
+    Branch:
+      type: object
+      required:
+        - name
+        - lastCommitSHA
+      properties:
+        name:
+          type: string
+          description: Branch name
+        lastCommitSHA:
+          type: string
+          description: Last commit hash
+
+    Error:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: string
+          description: Http status code
+        message:
+          type: string
+          description: Error description

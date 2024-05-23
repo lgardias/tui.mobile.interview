@@ -7,6 +7,10 @@ spring:
     problemdetails:
       enabled: true
 
+server:
+  error:
+    include-binding-errors=ALWAYS:
+
 logging:
   level:
     io:
