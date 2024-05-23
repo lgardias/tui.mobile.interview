@@ -1,6 +1,5 @@
 package com.tui.mobile.interview.filter;
 
-import com.tui.mobile.interview.exception.WrongHeaderException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;

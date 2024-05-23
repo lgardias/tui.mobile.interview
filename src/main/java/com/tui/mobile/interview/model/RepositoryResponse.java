@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @ToString
-public class Repository {
+public class RepositoryResponse {
     String name;
     String ownerLogin;
     List<Branch> branches;
